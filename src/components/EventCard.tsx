@@ -32,8 +32,8 @@ export default function EventCard({ event }: EventCardProps) {
       }
 
       if (response.ok) {
-        // Redirect to event registration page or payment page
-        router.push(`/evento/${event.id}/inscricao`);
+        // Redirect to user's events page to see the QR code
+        router.push("/meus-eventos");
       } else {
         const error = await response.json();
         alert(error.error || "Erro ao se inscrever no evento");

@@ -43,7 +43,7 @@ function RegisterForm() {
           });
 
           if (registrationResponse.ok) {
-            router.push(`/evento/${eventId}/inscricao`);
+            router.push("/meus-eventos");
           } else {
             router.push("/");
           }
