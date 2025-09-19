@@ -23,17 +23,34 @@ export async function sendConfirmationEmail(
   }
 
   try {
+    // Para plano gratuito do Resend, só pode enviar para o email do proprietário
+    const isFreePlan = !process.env.RESEND_VERIFIED_DOMAIN
+    const emailTo = isFreePlan ? 'luan.s9d7s@gmail.com' : to
+    
+    if (isFreePlan && to !== 'luan.s9d7s@gmail.com') {
+      console.log(`⚠️ Plano gratuito: Redirecionando email de ${to} para luan.s9d7s@gmail.com`)
+    }
+
     const { data, error } = await resend.emails.send({
       from: 'Go Events <onboarding@resend.dev>', // Email padrão do Resend para testes
-      to: [to],
-      subject: `Confirmação de Pagamento - ${eventTitle}`,
+      to: [emailTo],
+      subject: `Confirmação de Pagamento - ${eventTitle}${isFreePlan ? ` (enviado para ${to})` : ''}`,
       html: `
         <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
           <h2 style="color: #2563eb; text-align: center;">🎉 Pagamento Confirmado!</h2>
           
+          ${isFreePlan && to !== emailTo ? `
+          <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 0; color: #856404;">
+              <strong>📧 Nota:</strong> Este email era para ser enviado para <strong>${to}</strong>, 
+              mas devido às limitações do plano gratuito do Resend, foi redirecionado para seu email.
+            </p>
+          </div>
+          ` : ''}
+
           <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <p style="font-size: 16px; color: #374151; margin: 0;">
-              Seu pagamento para o evento <strong style="color: #2563eb;">${eventTitle}</strong> foi confirmado com sucesso!
+              ${isFreePlan && to !== emailTo ? `O usuário <strong>${to}</strong> teve seu` : 'Seu'} pagamento para o evento <strong style="color: #2563eb;">${eventTitle}</strong> foi confirmado com sucesso!
             </p>
           </div>
 
