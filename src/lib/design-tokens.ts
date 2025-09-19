@@ -103,21 +103,27 @@ export const classNames = {
   // Card patterns
   card: {
     base: "bg-white rounded-2xl shadow-md overflow-hidden",
-    hover: "transform transition-all duration-200 hover:scale-105 motion-safe:transition-transform",
-    interactive: "bg-white rounded-2xl shadow-md overflow-hidden transform transition-all duration-200 hover:scale-105 motion-safe:transition-transform cursor-pointer",
+    hover:
+      "transform transition-all duration-200 hover:scale-105 motion-safe:transition-transform",
+    interactive:
+      "bg-white rounded-2xl shadow-md overflow-hidden transform transition-all duration-200 hover:scale-105 motion-safe:transition-transform cursor-pointer",
   },
 
   // Button patterns
   button: {
-    primary: "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600 text-white shadow-sm hover:bg-violet-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
-    secondary: "inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
-    ghost: "inline-flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
+    primary:
+      "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600 text-white shadow-sm hover:bg-violet-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
+    secondary:
+      "inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
+    ghost:
+      "inline-flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
   },
 
   // Input patterns
   input: {
     base: "w-full px-4 py-3 rounded-lg border border-gray-200 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors duration-200",
-    error: "w-full px-4 py-3 rounded-lg border border-red-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200",
+    error:
+      "w-full px-4 py-3 rounded-lg border border-red-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200",
   },
 
   // Layout patterns
@@ -136,10 +142,14 @@ export const classNames = {
 
   // Badge patterns
   badge: {
-    primary: "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-violet-50 text-violet-600",
-    success: "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-600",
-    warning: "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-600",
-    error: "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600",
+    primary:
+      "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-violet-50 text-violet-600",
+    success:
+      "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-600",
+    warning:
+      "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-600",
+    error:
+      "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600",
   },
 } as const;
 
