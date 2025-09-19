@@ -97,8 +97,13 @@ export function FeaturedCarousel({ events }: FeaturedCarouselProps) {
       >
         <CarouselContent className="-ml-2 md:-ml-4">
           {events.map((event) => (
-            <CarouselItem key={event.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <div className={`${classNames.card.base} ${classNames.card.hover} group cursor-pointer h-full`}>
+            <CarouselItem
+              key={event.id}
+              className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
+            >
+              <div
+                className={`${classNames.card.base} ${classNames.card.hover} group cursor-pointer h-full`}
+              >
                 {/* Image */}
                 <div className="relative aspect-[16/9] overflow-hidden">
                   <Image
@@ -111,14 +116,14 @@ export function FeaturedCarousel({ events }: FeaturedCarouselProps) {
                         "https://via.placeholder.com/400x225/f3f4f6/6b7280?text=Imagem+Indisponível";
                     }}
                   />
-                  
+
                   {/* Price badge */}
                   <div className="absolute top-4 right-4">
                     <Badge className="bg-white/90 text-violet-700 font-semibold text-sm px-3 py-1">
                       {formatPrice(event.price)}
                     </Badge>
                   </div>
-                  
+
                   {/* Date badge */}
                   <div className="absolute top-4 left-4">
                     <div className="bg-white/95 rounded-lg p-2 text-center min-w-[3rem]">
@@ -147,9 +152,11 @@ export function FeaturedCarousel({ events }: FeaturedCarouselProps) {
                     <div className="space-y-2 mb-6">
                       <div className="flex items-center text-sm text-gray-500">
                         <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
-                        <span>{formatDate(event.date)} às {formatTime(event.date)}</span>
+                        <span>
+                          {formatDate(event.date)} às {formatTime(event.date)}
+                        </span>
                       </div>
-                      
+
                       {event._count && (
                         <div className="flex items-center text-sm text-gray-500">
                           <Users className="w-4 h-4 mr-2 flex-shrink-0" />
@@ -172,7 +179,7 @@ export function FeaturedCarousel({ events }: FeaturedCarouselProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        
+
         <CarouselPrevious className="hidden md:flex -left-4 bg-white/90 border-gray-200 hover:bg-white hover:border-violet-300 text-gray-700" />
         <CarouselNext className="hidden md:flex -right-4 bg-white/90 border-gray-200 hover:bg-white hover:border-violet-300 text-gray-700" />
       </Carousel>
@@ -181,10 +188,7 @@ export function FeaturedCarousel({ events }: FeaturedCarouselProps) {
       <div className="flex justify-center mt-4 md:hidden">
         <div className="flex space-x-2">
           {events.slice(0, 3).map((_, index) => (
-            <div
-              key={index}
-              className="w-2 h-2 rounded-full bg-gray-300"
-            />
+            <div key={index} className="w-2 h-2 rounded-full bg-gray-300" />
           ))}
         </div>
       </div>

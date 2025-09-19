@@ -128,7 +128,8 @@ export default async function HomePage() {
                   Nenhum evento disponível
                 </h3>
                 <p className="text-gray-500 mb-6">
-                  Não há eventos cadastrados no momento. Volte em breve para descobrir novos eventos!
+                  Não há eventos cadastrados no momento. Volte em breve para
+                  descobrir novos eventos!
                 </p>
               </div>
             </div>

@@ -89,12 +89,16 @@ export default function EventCard({ event }: EventCardProps) {
   const isEventThisWeek = (dateString: string) => {
     const today = new Date();
     const eventDate = new Date(dateString);
-    const daysDiff = Math.ceil((eventDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
+    const daysDiff = Math.ceil(
+      (eventDate.getTime() - today.getTime()) / (1000 * 3600 * 24)
+    );
     return daysDiff >= 0 && daysDiff <= 7;
   };
 
   return (
-    <Card className={`${classNames.card.hover} group h-full flex flex-col overflow-hidden border-0 shadow-md hover:shadow-lg`}>
+    <Card
+      className={`${classNames.card.hover} group h-full flex flex-col overflow-hidden border-0 shadow-md hover:shadow-lg`}
+    >
       {/* Image Section */}
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
@@ -107,7 +111,7 @@ export default function EventCard({ event }: EventCardProps) {
               "https://via.placeholder.com/400x225/f3f4f6/6b7280?text=Imagem+Indisponível";
           }}
         />
-        
+
         {/* Price Badge */}
         <div className="absolute top-3 right-3">
           <Badge className="bg-white/95 text-violet-700 font-semibold text-sm px-3 py-1 shadow-sm">
@@ -161,12 +165,12 @@ export default function EventCard({ event }: EventCardProps) {
               <Calendar className="w-3.5 h-3.5 mr-2 flex-shrink-0" />
               <span>{formatDate(event.date)}</span>
             </div>
-            
+
             <div className="flex items-center text-xs text-gray-500">
               <Clock className="w-3.5 h-3.5 mr-2 flex-shrink-0" />
               <span>{formatTime(event.date)}</span>
             </div>
-            
+
             {event._count && (
               <div className="flex items-center text-xs text-gray-500">
                 <Users className="w-3.5 h-3.5 mr-2 flex-shrink-0" />
