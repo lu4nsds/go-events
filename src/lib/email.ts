@@ -1,6 +1,6 @@
-import { Resend } from 'resend'
+import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendConfirmationEmail(
   to: string,
@@ -8,49 +8,55 @@ export async function sendConfirmationEmail(
   qrCode: string
 ) {
   // For development, we'll still log to console but also try to send
-  if (process.env.NODE_ENV === 'development') {
-    console.log('=== EMAIL DE CONFIRMAÇÃO ===')
-    console.log(`Para: ${to}`)
-    console.log(`Assunto: Confirmação de Pagamento - ${eventTitle}`)
-    console.log(`QR Code: ${qrCode}`)
-    console.log('============================')
+  if (process.env.NODE_ENV === "development") {
+    console.log("=== EMAIL DE CONFIRMAÇÃO ===");
+    console.log(`Para: ${to}`);
+    console.log(`Assunto: Confirmação de Pagamento - ${eventTitle}`);
+    console.log(`QR Code: ${qrCode}`);
+    console.log("============================");
   }
 
   // Check if API key is configured
   if (!process.env.RESEND_API_KEY) {
-    console.log('⚠️ RESEND_API_KEY não configurada. Email não será enviado.')
-    return
+    console.log("⚠️ RESEND_API_KEY não configurada. Email não será enviado.");
+    return;
   }
 
   try {
     // Para plano gratuito do Resend, só pode enviar para o email do proprietário
-    const isFreePlan = !process.env.RESEND_VERIFIED_DOMAIN
-    const emailTo = isFreePlan ? 'luan.s9d7s@gmail.com' : to
-    
-    if (isFreePlan && to !== 'luan.s9d7s@gmail.com') {
-      console.log(`⚠️ Plano gratuito: Redirecionando email de ${to} para luan.s9d7s@gmail.com`)
+    const isFreePlan = !process.env.RESEND_VERIFIED_DOMAIN;
+    const emailTo = isFreePlan ? "luan.s9d7s@gmail.com" : to;
+
+    if (isFreePlan && to !== "luan.s9d7s@gmail.com") {
+      console.log(
+        `⚠️ Plano gratuito: Redirecionando email de ${to} para luan.s9d7s@gmail.com`
+      );
     }
 
     const { data, error } = await resend.emails.send({
-      from: 'Go Events <onboarding@resend.dev>', // Email padrão do Resend para testes
+      from: "Go Events <onboarding@resend.dev>", // Email padrão do Resend para testes
       to: [emailTo],
-      subject: `Confirmação de Pagamento - ${eventTitle}${isFreePlan ? ` (enviado para ${to})` : ''}`,
+      subject: `Confirmação de Pagamento - ${eventTitle}${isFreePlan ? ` (enviado para ${to})` : ""}`,
       html: `
         <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
           <h2 style="color: #2563eb; text-align: center;">🎉 Pagamento Confirmado!</h2>
           
-          ${isFreePlan && to !== emailTo ? `
+          ${
+            isFreePlan && to !== emailTo
+              ? `
           <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <p style="margin: 0; color: #856404;">
               <strong>📧 Nota:</strong> Este email era para ser enviado para <strong>${to}</strong>, 
               mas devido às limitações do plano gratuito do Resend, foi redirecionado para seu email.
             </p>
           </div>
-          ` : ''}
+          `
+              : ""
+          }
 
           <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <p style="font-size: 16px; color: #374151; margin: 0;">
-              ${isFreePlan && to !== emailTo ? `O usuário <strong>${to}</strong> teve seu` : 'Seu'} pagamento para o evento <strong style="color: #2563eb;">${eventTitle}</strong> foi confirmado com sucesso!
+              ${isFreePlan && to !== emailTo ? `O usuário <strong>${to}</strong> teve seu` : "Seu"} pagamento para o evento <strong style="color: #2563eb;">${eventTitle}</strong> foi confirmado com sucesso!
             </p>
           </div>
 
@@ -73,16 +79,15 @@ export async function sendConfirmationEmail(
           </p>
         </div>
       `,
-    })
+    });
 
     if (error) {
-      console.error('❌ Erro ao enviar email via Resend:', error)
-      return
+      console.error("❌ Erro ao enviar email via Resend:", error);
+      return;
     }
 
-    console.log('✅ Email enviado com sucesso via Resend:', data?.id)
-    
+    console.log("✅ Email enviado com sucesso via Resend:", data?.id);
   } catch (error) {
-    console.error('❌ Erro ao enviar email:', error)
+    console.error("❌ Erro ao enviar email:", error);
   }
 }
