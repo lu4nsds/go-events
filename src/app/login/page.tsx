@@ -31,6 +31,8 @@ function LoginForm() {
       });
 
       if (response.ok) {
+        // Trigger auth state change event
+        window.dispatchEvent(new Event('authChange'));
         router.push(redirectTo);
         router.refresh();
       } else {

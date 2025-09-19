@@ -18,6 +18,25 @@ export default function Navbar() {
 
   useEffect(() => {
     checkAuthStatus();
+    
+    // Listen for storage events (useful for sync across tabs)
+    const handleStorageChange = () => {
+      checkAuthStatus();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Listen for custom events
+    const handleAuthChange = () => {
+      checkAuthStatus();
+    };
+    
+    window.addEventListener('authChange', handleAuthChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('authChange', handleAuthChange);
+    };
   }, []);
 
   const checkAuthStatus = async () => {
@@ -38,6 +57,8 @@ export default function Navbar() {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
       setUser(null);
+      // Trigger auth state change event
+      window.dispatchEvent(new Event('authChange'));
       router.push("/");
       router.refresh();
     } catch (error) {

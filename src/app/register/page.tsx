@@ -50,6 +50,8 @@ function RegisterForm() {
         } else {
           router.push("/");
         }
+        // Trigger auth state change event
+        window.dispatchEvent(new Event('authChange'));
         router.refresh();
       } else {
         const data = await response.json();
