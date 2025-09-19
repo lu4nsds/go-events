@@ -1,6 +1,8 @@
 import EventCard from "@/components/EventCard";
+import { FeaturedCarousel } from "@/components/FeaturedCarousel";
 import { Event } from "@/types";
 import { prisma } from "@/lib/prisma";
+import { classNames } from "@/lib/design-tokens";
 
 async function getEvents(): Promise<Event[]> {
   try {
@@ -29,35 +31,116 @@ async function getEvents(): Promise<Event[]> {
   }
 }
 
+async function getFeaturedEvents(): Promise<Event[]> {
+  try {
+    // Get featured events (first 5 events for now, could be based on criteria)
+    const events = await prisma.event.findMany({
+      include: {
+        _count: {
+          select: {
+            registrations: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 5,
+    });
+
+    return events.map((event) => ({
+      ...event,
+      date: event.date.toISOString(),
+      createdAt: event.createdAt.toISOString(),
+    }));
+  } catch (error) {
+    console.error("Error fetching featured events:", error);
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const events = await getEvents();
+  const [events, featuredEvents] = await Promise.all([
+    getEvents(),
+    getFeaturedEvents(),
+  ]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Descubra Eventos Incríveis
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Encontre e participe dos melhores eventos da sua cidade. Cultura,
-          tecnologia, música e muito mais!
-        </p>
-      </div>
-
-      {events.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-500 text-lg">
-            <p>Nenhum evento disponível no momento.</p>
-            <p className="mt-2">Volte em breve para descobrir novos eventos!</p>
+    <div className="min-h-screen">
+      {/* Hero Section with Featured Events Carousel */}
+      <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 py-16 lg:py-24">
+        <div className={classNames.container.xl}>
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Descubra Eventos
+              <span className="block bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+                Incríveis
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Encontre e participe dos melhores eventos da sua cidade. Cultura,
+              tecnologia, música e muito mais!
+            </p>
           </div>
+
+          {featuredEvents.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+                Eventos em Destaque
+              </h2>
+              <FeaturedCarousel events={featuredEvents} />
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map((event: Event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
+      </section>
+
+      {/* All Events Section */}
+      <section className="py-16 lg:py-20">
+        <div className={classNames.container.xl}>
+          <div className="mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">
+              Todos os Eventos
+            </h2>
+            <p className="text-gray-600 text-center max-w-2xl mx-auto">
+              Explore nossa seleção completa de eventos disponíveis
+            </p>
+          </div>
+
+          {events.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-12 h-12 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Nenhum evento disponível
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  Não há eventos cadastrados no momento. Volte em breve para descobrir novos eventos!
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={classNames.grid.responsive}>
+              {events.map((event: Event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </section>
     </div>
   );
 }

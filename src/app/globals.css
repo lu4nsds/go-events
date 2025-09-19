@@ -130,7 +130,9 @@ body {
 .toast-custom {
   border-radius: 0.75rem !important;
   border: 1px solid #e5e7eb !important;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
 }
 
 /* Toast variants */

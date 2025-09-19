@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <Navbar />
         <main className="min-h-screen bg-white">{children}</main>
-        <Toaster 
+        <Toaster
           position="top-right"
           expand={true}
           richColors
