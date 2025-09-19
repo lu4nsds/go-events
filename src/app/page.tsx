@@ -16,9 +16,9 @@ async function getEvents(): Promise<Event[]> {
         date: "asc",
       },
     });
-    
+
     // Convert dates to strings for client compatibility
-    return events.map(event => ({
+    return events.map((event) => ({
       ...event,
       date: event.date.toISOString(),
       createdAt: event.createdAt.toISOString(),
