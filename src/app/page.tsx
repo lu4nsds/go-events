@@ -1,18 +1,28 @@
 import EventCard from "@/components/EventCard";
 import { Event } from "@/types";
+import { prisma } from "@/lib/prisma";
 
-async function getEvents() {
+async function getEvents(): Promise<Event[]> {
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/events`,
-      {
-        cache: "no-store",
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch events");
-    }
-    return await response.json();
+    const events = await prisma.event.findMany({
+      include: {
+        _count: {
+          select: {
+            registrations: true,
+          },
+        },
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
+    
+    // Convert dates to strings for client compatibility
+    return events.map(event => ({
+      ...event,
+      date: event.date.toISOString(),
+      createdAt: event.createdAt.toISOString(),
+    }));
   } catch (error) {
     console.error("Error fetching events:", error);
     return [];
