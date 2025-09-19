@@ -126,7 +126,7 @@ export default function AdminEventsPage() {
         <div className="text-center py-12">
           <div className="text-gray-500 text-lg">
             <p>Nenhum evento criado ainda.</p>
-            <p className="mt-2">Clique em "Novo Evento" para começar.</p>
+            <p className="mt-2">Clique em &quot;Novo Evento&quot; para começar.</p>
           </div>
         </div>
       ) : (
