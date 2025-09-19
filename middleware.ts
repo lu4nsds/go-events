@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyToken } from "./src/lib/auth";
 
 const publicPaths = ["/", "/login", "/register"];
 const adminPaths = ["/admin"];
-const protectedPaths = ["/meus-eventos"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -19,17 +17,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Verify token
-  const user = verifyToken(token);
-  if (!user) {
-    const response = NextResponse.redirect(new URL("/login", request.url));
-    response.cookies.delete("auth-token");
-    return response;
-  }
-
-  // Check admin access
-  if (adminPaths.some((path) => pathname.startsWith(path)) && !user.isAdmin) {
-    return NextResponse.redirect(new URL("/", request.url));
+  // For admin paths, we'll do a basic check
+  // The actual admin verification will happen on the server side
+  if (adminPaths.some((path) => pathname.startsWith(path))) {
+    // If no token, redirect to login
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    // Let the actual page handle admin verification
   }
 
   return NextResponse.next();
