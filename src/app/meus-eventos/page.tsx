@@ -4,22 +4,28 @@ import { useEffect, useState } from "react";
 import { Registration } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
-import { 
-  Calendar, 
-  Clock, 
-  CreditCard, 
-  QrCode, 
-  CheckCircle, 
+import {
+  Calendar,
+  Clock,
+  CreditCard,
+  QrCode,
+  CheckCircle,
   AlertCircle,
   Ticket,
   ArrowRight,
   Download,
-  Copy
+  Copy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { classNames } from "@/lib/design-tokens";
 import { toast } from "sonner";
 
@@ -27,7 +33,9 @@ export default function MeusEventosPage() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [processingPayment, setProcessingPayment] = useState<string | null>(null);
+  const [processingPayment, setProcessingPayment] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     fetchRegistrations();
@@ -64,9 +72,12 @@ export default function MeusEventosPage() {
       });
 
       if (response.ok) {
-        toast.success("Pagamento confirmado! Seu QR Code de entrada foi gerado.", {
-          description: "Verifique seu email para mais detalhes."
-        });
+        toast.success(
+          "Pagamento confirmado! Seu QR Code de entrada foi gerado.",
+          {
+            description: "Verifique seu email para mais detalhes.",
+          }
+        );
         fetchRegistrations(); // Refresh the list
       } else {
         const error = await response.json();
@@ -90,9 +101,9 @@ export default function MeusEventosPage() {
   };
 
   const downloadQrCode = (qrCode: string, eventTitle: string) => {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = qrCode;
-    link.download = `qr-code-${eventTitle.replace(/\s+/g, '-').toLowerCase()}.png`;
+    link.download = `qr-code-${eventTitle.replace(/\s+/g, "-").toLowerCase()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -121,7 +132,15 @@ export default function MeusEventosPage() {
     }).format(price);
   };
 
-  const QrCodeModal = ({ qrCode, eventTitle, isPaid }: { qrCode: string, eventTitle: string, isPaid: boolean }) => (
+  const QrCodeModal = ({
+    qrCode,
+    eventTitle,
+    isPaid,
+  }: {
+    qrCode: string;
+    eventTitle: string;
+    isPaid: boolean;
+  }) => (
     <DialogContent className="max-w-md">
       <DialogHeader>
         <DialogTitle className="flex items-center gap-2">
@@ -141,13 +160,12 @@ export default function MeusEventosPage() {
             />
           </div>
         </div>
-        
+
         <div className="text-center space-y-2">
           <p className="text-sm text-gray-600">
-            {isPaid 
-              ? "Apresente este QR Code na entrada do evento" 
-              : "Use este QR Code para fazer o pagamento via PIX"
-            }
+            {isPaid
+              ? "Apresente este QR Code na entrada do evento"
+              : "Use este QR Code para fazer o pagamento via PIX"}
           </p>
         </div>
 
@@ -213,8 +231,12 @@ export default function MeusEventosPage() {
     );
   }
 
-  const pendingRegistrations = registrations.filter((reg) => reg.status === "pending");
-  const paidRegistrations = registrations.filter((reg) => reg.status === "paid");
+  const pendingRegistrations = registrations.filter(
+    (reg) => reg.status === "pending"
+  );
+  const paidRegistrations = registrations.filter(
+    (reg) => reg.status === "paid"
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -240,7 +262,8 @@ export default function MeusEventosPage() {
                   Nenhum evento encontrado
                 </h3>
                 <p className="text-gray-500 mb-6">
-                  Você ainda não se inscreveu em nenhum evento. Descubra eventos incríveis para participar!
+                  Você ainda não se inscreveu em nenhum evento. Descubra eventos
+                  incríveis para participar!
                 </p>
                 <Button asChild className="rounded-full">
                   <Link href="/">
@@ -261,14 +284,20 @@ export default function MeusEventosPage() {
                   <h2 className="text-2xl font-semibold text-gray-900">
                     Aguardando Pagamento
                   </h2>
-                  <Badge variant="secondary" className="bg-amber-50 text-amber-700">
+                  <Badge
+                    variant="secondary"
+                    className="bg-amber-50 text-amber-700"
+                  >
                     {pendingRegistrations.length}
                   </Badge>
                 </div>
-                
+
                 <div className="grid gap-6">
                   {pendingRegistrations.map((registration) => (
-                    <Card key={registration.id} className="border-amber-200 bg-amber-50/50">
+                    <Card
+                      key={registration.id}
+                      className="border-amber-200 bg-amber-50/50"
+                    >
                       <CardContent className="p-6">
                         <div className="flex flex-col lg:flex-row gap-6">
                           {/* Event Image */}
@@ -301,11 +330,15 @@ export default function MeusEventosPage() {
                                 <>
                                   <div className="flex items-center gap-1">
                                     <Calendar className="w-4 h-4" />
-                                    <span>{formatDate(registration.event.date)}</span>
+                                    <span>
+                                      {formatDate(registration.event.date)}
+                                    </span>
                                   </div>
                                   <div className="flex items-center gap-1">
                                     <Clock className="w-4 h-4" />
-                                    <span>{formatTime(registration.event.date)}</span>
+                                    <span>
+                                      {formatTime(registration.event.date)}
+                                    </span>
                                   </div>
                                 </>
                               )}
@@ -322,10 +355,13 @@ export default function MeusEventosPage() {
 
                           {/* Actions */}
                           <div className="flex flex-col items-end gap-3 lg:min-w-[200px]">
-                            <Badge variant="outline" className="border-amber-300 text-amber-700 bg-amber-100">
+                            <Badge
+                              variant="outline"
+                              className="border-amber-300 text-amber-700 bg-amber-100"
+                            >
                               Pagamento Pendente
                             </Badge>
-                            
+
                             <div className="flex gap-2 w-full lg:w-auto">
                               {registration.qrCode && (
                                 <Dialog>
@@ -335,14 +371,14 @@ export default function MeusEventosPage() {
                                       PIX
                                     </Button>
                                   </DialogTrigger>
-                                  <QrCodeModal 
-                                    qrCode={registration.qrCode} 
-                                    eventTitle={registration.event?.title || ""} 
+                                  <QrCodeModal
+                                    qrCode={registration.qrCode}
+                                    eventTitle={registration.event?.title || ""}
                                     isPaid={false}
                                   />
                                 </Dialog>
                               )}
-                              
+
                               <Button
                                 onClick={() => handlePayment(registration.id)}
                                 disabled={processingPayment === registration.id}
@@ -379,14 +415,20 @@ export default function MeusEventosPage() {
                   <h2 className="text-2xl font-semibold text-gray-900">
                     Eventos Confirmados
                   </h2>
-                  <Badge variant="secondary" className="bg-emerald-50 text-emerald-700">
+                  <Badge
+                    variant="secondary"
+                    className="bg-emerald-50 text-emerald-700"
+                  >
                     {paidRegistrations.length}
                   </Badge>
                 </div>
-                
+
                 <div className="grid gap-6">
                   {paidRegistrations.map((registration) => (
-                    <Card key={registration.id} className="border-emerald-200 bg-emerald-50/50">
+                    <Card
+                      key={registration.id}
+                      className="border-emerald-200 bg-emerald-50/50"
+                    >
                       <CardContent className="p-6">
                         <div className="flex flex-col lg:flex-row gap-6">
                           {/* Event Image */}
@@ -419,11 +461,15 @@ export default function MeusEventosPage() {
                                 <>
                                   <div className="flex items-center gap-1">
                                     <Calendar className="w-4 h-4" />
-                                    <span>{formatDate(registration.event.date)}</span>
+                                    <span>
+                                      {formatDate(registration.event.date)}
+                                    </span>
                                   </div>
                                   <div className="flex items-center gap-1">
                                     <Clock className="w-4 h-4" />
-                                    <span>{formatTime(registration.event.date)}</span>
+                                    <span>
+                                      {formatTime(registration.event.date)}
+                                    </span>
                                   </div>
                                 </>
                               )}
@@ -443,18 +489,21 @@ export default function MeusEventosPage() {
                             <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300">
                               ✓ Confirmado
                             </Badge>
-                            
+
                             {registration.qrCode && (
                               <Dialog>
                                 <DialogTrigger asChild>
-                                  <Button variant="outline" className="w-full lg:w-auto">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full lg:w-auto"
+                                  >
                                     <QrCode className="w-4 h-4 mr-2" />
                                     QR Code de Entrada
                                   </Button>
                                 </DialogTrigger>
-                                <QrCodeModal 
-                                  qrCode={registration.qrCode} 
-                                  eventTitle={registration.event?.title || ""} 
+                                <QrCodeModal
+                                  qrCode={registration.qrCode}
+                                  eventTitle={registration.event?.title || ""}
                                   isPaid={true}
                                 />
                               </Dialog>

@@ -4,20 +4,25 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Event } from "@/types";
 import EventForm from "@/components/EventForm";
-import { 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Calendar, 
-  DollarSign, 
-  Users, 
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Calendar,
+  DollarSign,
+  Users,
   AlertCircle,
   Settings,
-  Ticket
+  Ticket,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { classNames } from "@/lib/design-tokens";
 import { toast } from "sonner";
 
@@ -54,7 +59,7 @@ export default function AdminEventsPage() {
 
   const handleDelete = async (eventId: string) => {
     setDeletingEvent(eventId);
-    
+
     try {
       const response = await fetch(`/api/events/${eventId}`, {
         method: "DELETE",
@@ -83,6 +88,11 @@ export default function AdminEventsPage() {
 
   const handleEdit = (event: Event) => {
     setEditingEvent(event);
+    setShowForm(true);
+  };
+
+  const handleNewEvent = () => {
+    setEditingEvent(null);
     setShowForm(true);
   };
 
@@ -178,11 +188,8 @@ export default function AdminEventsPage() {
               Crie, edite e gerencie os eventos da plataforma
             </p>
           </div>
-          
-          <Button 
-            onClick={() => setShowForm(true)}
-            className="rounded-full font-medium"
-          >
+
+          <Button onClick={handleNewEvent} className="rounded-full font-medium">
             <Plus className="w-4 h-4 mr-2" />
             Novo Evento
           </Button>
@@ -190,16 +197,13 @@ export default function AdminEventsPage() {
 
         {/* Event Form Dialog */}
         <Dialog open={showForm} onOpenChange={setShowForm}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
             <DialogHeader>
               <DialogTitle>
                 {editingEvent ? "Editar Evento" : "Novo Evento"}
               </DialogTitle>
             </DialogHeader>
-            <EventForm 
-              event={editingEvent} 
-              onClose={handleFormClose}
-            />
+            <EventForm event={editingEvent} onClose={handleFormClose} />
           </DialogContent>
         </Dialog>
 
@@ -215,12 +219,10 @@ export default function AdminEventsPage() {
                   Nenhum evento criado
                 </h3>
                 <p className="text-gray-500 mb-6">
-                  Comece criando seu primeiro evento para aparecer na plataforma.
+                  Comece criando seu primeiro evento para aparecer na
+                  plataforma.
                 </p>
-                <Button 
-                  onClick={() => setShowForm(true)}
-                  className="rounded-full"
-                >
+                <Button onClick={handleNewEvent} className="rounded-full">
                   <Plus className="w-4 h-4 mr-2" />
                   Criar Primeiro Evento
                 </Button>
@@ -230,7 +232,10 @@ export default function AdminEventsPage() {
         ) : (
           <div className="grid gap-6">
             {events.map((event) => (
-              <Card key={event.id} className="hover:shadow-lg transition-shadow duration-200">
+              <Card
+                key={event.id}
+                className="hover:shadow-lg transition-shadow duration-200"
+              >
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row gap-6">
                     {/* Event Image */}
@@ -242,7 +247,7 @@ export default function AdminEventsPage() {
                           fill
                           className="object-cover"
                           onError={(e) => {
-                            e.currentTarget.src = 
+                            e.currentTarget.src =
                               "https://via.placeholder.com/160x112/f3f4f6/6b7280?text=Imagem+Indisponível";
                           }}
                         />
@@ -266,10 +271,12 @@ export default function AdminEventsPage() {
                           <Calendar className="w-4 h-4 text-violet-600" />
                           <div>
                             <div>{formatDate(event.date)}</div>
-                            <div className="text-xs">{formatTime(event.date)}</div>
+                            <div className="text-xs">
+                              {formatTime(event.date)}
+                            </div>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                           <DollarSign className="w-4 h-4 text-emerald-600" />
                           <div>
@@ -279,7 +286,7 @@ export default function AdminEventsPage() {
                             <div className="text-xs">Preço</div>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                           <Users className="w-4 h-4 text-blue-600" />
                           <div>
@@ -303,7 +310,7 @@ export default function AdminEventsPage() {
                         <Edit className="w-4 h-4 mr-2" />
                         Editar
                       </Button>
-                      
+
                       <Button
                         onClick={() => confirmDelete(event)}
                         variant="outline"

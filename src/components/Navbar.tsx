@@ -3,15 +3,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, User, LogOut, Settings } from "lucide-react";
+import { Menu, User, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerTrigger,
-  DrawerClose,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { classNames } from "@/lib/design-tokens";
 import { toast } from "sonner";
 
@@ -94,38 +95,44 @@ export default function Navbar() {
       <Link
         href="/"
         className={`text-gray-700 hover:text-violet-600 transition-colors duration-200 ${
-          mobile ? "block py-3 px-4 text-lg" : ""
+          mobile
+            ? "flex items-center py-4 px-4 text-lg font-medium hover:bg-gray-100 rounded-md"
+            : ""
         }`}
         onClick={onLinkClick}
       >
+        {mobile && <Menu className="w-5 h-5 mr-3" />}
         Eventos
       </Link>
 
       {user && (
-        <>
-          <Link
-            href="/meus-eventos"
-            className={`text-gray-700 hover:text-violet-600 transition-colors duration-200 ${
-              mobile ? "block py-3 px-4 text-lg" : ""
-            }`}
-            onClick={onLinkClick}
-          >
-            Meus Eventos
-          </Link>
+        <Link
+          href="/meus-eventos"
+          className={`text-gray-700 hover:text-violet-600 transition-colors duration-200 ${
+            mobile
+              ? "flex items-center py-4 px-4 text-lg font-medium hover:bg-gray-100 rounded-md"
+              : ""
+          }`}
+          onClick={onLinkClick}
+        >
+          {mobile && <User className="w-5 h-5 mr-3" />}
+          Meus Eventos
+        </Link>
+      )}
 
-          {user.isAdmin && (
-            <Link
-              href="/admin/events"
-              className={`text-gray-700 hover:text-violet-600 transition-colors duration-200 ${
-                mobile ? "block py-3 px-4 text-lg" : ""
-              }`}
-              onClick={onLinkClick}
-            >
-              <Settings className="inline-block w-4 h-4 mr-2" />
-              Admin
-            </Link>
-          )}
-        </>
+      {user && user.isAdmin && (
+        <Link
+          href="/admin/events"
+          className={`text-gray-700 hover:text-violet-600 transition-colors duration-200 ${
+            mobile
+              ? "flex items-center py-4 px-4 text-lg font-medium hover:bg-gray-100 rounded-md"
+              : ""
+          }`}
+          onClick={onLinkClick}
+        >
+          <Settings className={`w-5 h-5 ${mobile ? "mr-3" : "mr-2"}`} />
+          Admin
+        </Link>
       )}
     </>
   );
@@ -204,87 +211,109 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <Drawer open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-              <DrawerTrigger asChild>
-                <Button variant="ghost" size="sm" className="p-2">
-                  <Menu className="h-6 w-6" />
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="p-2 hover:bg-gray-100 transition-colors"
+                >
+                  <Menu className="h-6 w-6 text-gray-700" />
                   <span className="sr-only">Abrir menu</span>
                 </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center justify-between mb-6">
+              </SheetTrigger>
+
+              <SheetContent
+                side="left"
+                className="w-[80%] max-w-sm bg-white shadow-lg border-r border-gray-200 p-0"
+              >
+                <SheetHeader className="p-6 border-b border-gray-100">
+                  <SheetTitle>
                     <div className="text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                       Go Events
                     </div>
-                    <DrawerClose asChild>
-                      <Button variant="ghost" size="sm" className="p-2">
-                        <X className="h-5 w-5" />
-                      </Button>
-                    </DrawerClose>
+                  </SheetTitle>
+                </SheetHeader>
+
+                <div className="flex flex-col h-full">
+                  {/* Navigation Links */}
+                  <div className="flex-1 py-4">
+                    <nav className="space-y-1">
+                      <NavLinks
+                        mobile
+                        onLinkClick={() => setIsMobileMenuOpen(false)}
+                      />
+                    </nav>
                   </div>
 
-                  <div className="space-y-2">
-                    <NavLinks
-                      mobile
-                      onLinkClick={() => setIsMobileMenuOpen(false)}
-                    />
-                  </div>
-
-                  {user ? (
-                    <div className="pt-6 border-t border-gray-200">
-                      <div className="flex items-center space-x-3 mb-4">
-                        <Avatar className="h-10 w-10">
-                          <AvatarFallback className="bg-violet-100 text-violet-700 font-medium">
-                            {getUserInitials(user.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium text-gray-900">
-                            {user.name}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {user.email}
+                  {/* User Section */}
+                  <div className="border-t border-gray-100 p-6">
+                    {user ? (
+                      <div className="space-y-4">
+                        {/* User Info */}
+                        <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback className="bg-violet-100 text-violet-700 font-medium">
+                              {getUserInitials(user.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-gray-900 truncate">
+                              {user.name}
+                            </div>
+                            <div className="text-sm text-gray-500 truncate">
+                              {user.email}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <Button
-                        onClick={() => {
-                          handleLogout();
-                          setIsMobileMenuOpen(false);
-                        }}
-                        variant="ghost"
-                        className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Sair
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="pt-6 border-t border-gray-200 space-y-3">
-                      <Button variant="ghost" className="w-full" asChild>
-                        <Link
-                          href="/login"
-                          onClick={() => setIsMobileMenuOpen(false)}
+                        {/* Logout Button */}
+                        <Button
+                          onClick={() => {
+                            handleLogout();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          variant="outline"
+                          className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
                         >
-                          <User className="w-4 h-4 mr-2" />
-                          Login
-                        </Link>
-                      </Button>
-                      <Button className="w-full rounded-full" asChild>
-                        <Link
-                          href="/register"
-                          onClick={() => setIsMobileMenuOpen(false)}
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sair
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start"
+                          asChild
                         >
-                          Cadastrar
-                        </Link>
-                      </Button>
-                    </div>
-                  )}
+                          <Link
+                            href="/login"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex items-center"
+                          >
+                            <User className="w-4 h-4 mr-2" />
+                            Login
+                          </Link>
+                        </Button>
+
+                        <Button
+                          className="w-full rounded-full bg-violet-600 hover:bg-violet-700"
+                          asChild
+                        >
+                          <Link
+                            href="/register"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            Cadastrar
+                          </Link>
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </DrawerContent>
-            </Drawer>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>

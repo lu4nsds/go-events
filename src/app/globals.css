@@ -87,6 +87,42 @@ body {
   font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
 }
 
+/* Ensure interactive elements have pointer cursor */
+button,
+[type="button"],
+[type="submit"],
+[type="reset"],
+a[href],
+area[href],
+input[type="checkbox"],
+input[type="radio"],
+input[type="file"],
+select,
+summary,
+[tabindex]:not([tabindex="-1"]),
+[contenteditable="true"],
+[role="button"],
+[role="link"],
+[role="tab"],
+[role="option"],
+[role="menuitem"],
+[role="menuitemcheckbox"],
+[role="menuitemradio"] {
+  cursor: pointer;
+}
+
+/* Override for disabled elements */
+button:disabled,
+[type="button"]:disabled,
+[type="submit"]:disabled,
+[type="reset"]:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 /* Utilities for consistent spacing and effects */
 .card-hover {
   transition: var(--transition-default);

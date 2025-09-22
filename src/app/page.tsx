@@ -1,5 +1,5 @@
 import EventCard from "@/components/EventCard";
-import { FeaturedCarousel } from "@/components/FeaturedCarousel";
+import { FeaturedEventsCarousel } from "@/components/FeaturedEventsCarousel";
 import { Event } from "@/types";
 import { prisma } from "@/lib/prisma";
 import { classNames } from "@/lib/design-tokens";
@@ -68,9 +68,9 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Featured Events Carousel */}
-      <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 py-16 lg:py-24">
+      <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 py-4">
         <div className={classNames.container.xl}>
-          <div className="text-center mb-12">
+          <div className="text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Descubra Eventos
               <span className="block bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -88,7 +88,7 @@ export default async function HomePage() {
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
                 Eventos em Destaque
               </h2>
-              <FeaturedCarousel events={featuredEvents} />
+              <FeaturedEventsCarousel events={featuredEvents} />
             </div>
           )}
         </div>

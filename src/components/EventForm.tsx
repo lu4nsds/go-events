@@ -3,7 +3,13 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Event } from "@/types";
-import { Upload, ImageIcon, Calendar, DollarSign, FileText } from "lucide-react";
+import {
+  Upload,
+  ImageIcon,
+  Calendar,
+  DollarSign,
+  FileText,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -68,9 +74,9 @@ export default function EventForm({ event, onClose }: EventFormProps) {
             ? "Evento atualizado com sucesso!"
             : "Evento criado com sucesso!",
           {
-            description: event 
+            description: event
               ? "As alterações foram salvas e já estão visíveis na plataforma."
-              : "O novo evento está disponível para inscrições."
+              : "O novo evento está disponível para inscrições.",
           }
         );
         onClose();
@@ -158,7 +164,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
               onChange={handleChange}
               placeholder="https://exemplo.com/imagem-do-evento.jpg"
             />
-            
+
             {/* Image Preview */}
             {formData.imageUrl && (
               <Card className="border-dashed">
@@ -167,7 +173,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     <ImageIcon className="w-4 h-4" />
                     Preview da Imagem
                   </div>
-                  
+
                   {imagePreviewError ? (
                     <div className="flex items-center justify-center h-40 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                       <div className="text-center">
@@ -247,7 +253,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
           >
             Cancelar
           </Button>
-          
+
           <Button
             type="submit"
             disabled={loading}

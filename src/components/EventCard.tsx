@@ -97,7 +97,7 @@ export default function EventCard({ event }: EventCardProps) {
 
   return (
     <Card
-      className={`${classNames.card.hover} group h-full flex flex-col overflow-hidden border-0 shadow-md hover:shadow-lg`}
+      className={`${classNames.card.hover} group h-full flex flex-col overflow-hidden border-0 shadow-md hover:shadow-lg rounded-xl`}
     >
       {/* Image Section */}
       <div className="relative aspect-[16/9] overflow-hidden">
@@ -184,7 +184,7 @@ export default function EventCard({ event }: EventCardProps) {
         <Button
           onClick={handleParticipate}
           disabled={loading}
-          className="w-full rounded-full font-medium shadow-sm hover:shadow-md transition-all duration-200 active:scale-95"
+          className="w-full rounded-full font-medium bg-violet-600 hover:bg-violet-700 text-white shadow-sm hover:shadow-md transition-all duration-200 active:scale-95"
           size="default"
         >
           {loading ? (
