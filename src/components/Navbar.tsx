@@ -27,6 +27,8 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -51,6 +53,36 @@ export default function Navbar() {
       window.removeEventListener("authChange", handleAuthChange);
     };
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('[data-user-menu]')) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
 
   const checkAuthStatus = async () => {
     try {
@@ -105,7 +137,7 @@ export default function Navbar() {
         Eventos
       </Link>
 
-      {user && (
+      {user && !user.isAdmin && (
         <Link
           href="/meus-eventos"
           className={`text-gray-700 hover:text-violet-600 transition-colors duration-200 ${
@@ -120,7 +152,7 @@ export default function Navbar() {
         </Link>
       )}
 
-      {user && user.isAdmin && (
+      {user && user.isAdmin && mobile && (
         <Link
           href="/admin/events"
           className={`text-gray-700 hover:text-violet-600 transition-colors duration-200 ${
@@ -141,7 +173,7 @@ export default function Navbar() {
     return (
       <nav className="sticky top-0 bg-white shadow-sm z-50 border-b border-gray-100">
         <div className={classNames.container.xl}>
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-[70px]">
             <div className="flex items-center">
               <div className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
                 Go Events
@@ -157,9 +189,15 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 bg-white shadow-sm z-50 border-b border-gray-100">
+    <nav
+      className={`sticky top-0 z-50 transition-all duration-300 ease-in-out ${
+        isScrolled
+          ? "bg-white shadow-sm border-b border-gray-100"
+          : "bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50"
+      }`}
+    >
       <div className={classNames.container.xl}>
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-[70px]">
           {/* Logo */}
           <div className="flex items-center">
             <Link
@@ -175,8 +213,11 @@ export default function Navbar() {
             <NavLinks />
 
             {user ? (
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3">
+              <div className="relative" data-user-menu>
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200"
+                >
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-violet-100 text-violet-700 text-sm font-medium">
                       {getUserInitials(user.name)}
@@ -185,17 +226,54 @@ export default function Navbar() {
                   <span className="text-gray-700 font-medium">
                     Olá, {user.name.split(" ")[0]}
                   </span>
-                </div>
+                  <svg 
+                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
 
-                <Button
-                  onClick={handleLogout}
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-600 hover:text-red-600 hover:bg-red-50"
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sair
-                </Button>
+                {isUserMenuOpen && (
+                  <ul
+                    role="menu"
+                    className="absolute right-0 top-full mt-2 z-10 min-w-[180px] overflow-auto rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg focus:outline-none"
+                  >
+                    {user.isAdmin && (
+                      <li role="menuitem">
+                        <Link
+                          href="/admin/events"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="cursor-pointer text-gray-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100"
+                        >
+                          <Settings className="w-5 h-5 text-gray-400" />
+                          <p className="text-gray-800 font-medium ml-2">
+                            Admin
+                          </p>
+                        </Link>
+                      </li>
+                    )}
+                    
+                    <hr className="my-2 border-gray-200" role="menuitem" />
+                    
+                    <li role="menuitem">
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="cursor-pointer text-gray-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100"
+                      >
+                        <LogOut className="w-5 h-5 text-gray-400" />
+                        <p className="text-gray-800 font-medium ml-2">
+                          Sair
+                        </p>
+                      </button>
+                    </li>
+                  </ul>
+                )}
               </div>
             ) : (
               <div className="flex items-center space-x-3">

@@ -69,7 +69,7 @@ export default async function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section with Featured Events Carousel */}
       <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 py-4">
-        <div className={classNames.container.xl}>
+        <div className="w-full">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Descubra Eventos
@@ -77,10 +77,6 @@ export default async function HomePage() {
                 Incríveis
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Encontre e participe dos melhores eventos da sua cidade. Cultura,
-              tecnologia, música e muito mais!
-            </p>
           </div>
 
           {featuredEvents.length > 0 && (

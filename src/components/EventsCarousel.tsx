@@ -60,9 +60,9 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
       });
 
       if (response.status === 401) {
-        // User not logged in, redirect to register
+        // User not logged in, redirect to login with eventId
         toast.info("Faça login para se inscrever no evento");
-        router.push(`/register?eventId=${eventId}`);
+        router.push(`/login?eventId=${eventId}`);
         return;
       }
 
@@ -101,7 +101,7 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
   const currentEvent = getCurrentEvent();
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
+    <div className="w-full px-10 mx-auto">
       {/* Image Carousel */}
       <div className="relative">
         <Swiper

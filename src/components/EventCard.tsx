@@ -32,9 +32,9 @@ export default function EventCard({ event }: EventCardProps) {
       });
 
       if (response.status === 401) {
-        // User not logged in, redirect to register
+        // User not logged in, redirect to login with eventId
         toast.info("Faça login para se inscrever no evento");
-        router.push(`/register?eventId=${event.id}`);
+        router.push(`/login?eventId=${event.id}`);
         return;
       }
 

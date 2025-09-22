@@ -126,7 +126,7 @@ export default function AdminEventsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-full bg-gray-50 py-8">
         <div className={classNames.container.xl}>
           <div className="animate-pulse">
             <div className="flex justify-between items-center mb-8">
@@ -157,7 +157,7 @@ export default function AdminEventsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-full bg-gray-50 py-8">
         <div className={classNames.container.xl}>
           <Card className="border-red-200 bg-red-50">
             <CardContent className="p-6">
@@ -173,7 +173,7 @@ export default function AdminEventsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-full bg-gray-50 py-8">
       <div className={classNames.container.xl}>
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">

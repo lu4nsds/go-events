@@ -3,13 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Event } from "@/types";
-import {
-  Upload,
-  ImageIcon,
-  Calendar,
-  DollarSign,
-  FileText,
-} from "lucide-react";
+import { Upload, ImageIcon, DollarSign, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { classNames } from "@/lib/design-tokens";
 import { toast } from "sonner";
+import { EventSchema } from "@/lib/validations";
 
 interface EventFormProps {
   event?: Event | null;
@@ -33,6 +28,9 @@ export default function EventForm({ event, onClose }: EventFormProps) {
   });
   const [loading, setLoading] = useState(false);
   const [imagePreviewError, setImagePreviewError] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
 
   useEffect(() => {
     if (event) {
@@ -49,6 +47,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setValidationErrors({});
 
     try {
       const eventData = {
@@ -56,6 +55,20 @@ export default function EventForm({ event, onClose }: EventFormProps) {
         date: new Date(formData.date).toISOString(),
         price: Number(formData.price),
       };
+
+      // Client-side validation
+      const validation = EventSchema.safeParse(eventData);
+      if (!validation.success) {
+        const errors: Record<string, string> = {};
+        validation.error.issues.forEach((issue) => {
+          if (issue.path[0]) {
+            errors[issue.path[0] as string] = issue.message;
+          }
+        });
+        setValidationErrors(errors);
+        setLoading(false);
+        return;
+      }
 
       const url = event ? `/api/events/${event.id}` : "/api/events";
       const method = event ? "PUT" : "POST";
@@ -65,7 +78,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(eventData),
+        body: JSON.stringify(validation.data),
       });
 
       if (response.ok) {
@@ -128,8 +141,13 @@ export default function EventForm({ event, onClose }: EventFormProps) {
               value={formData.title}
               onChange={handleChange}
               placeholder="Ex: Workshop de React para Iniciantes"
-              className="mt-2"
+              className={`mt-2 focus-visible:ring-1 focus-visible:ring-violet-500/50 ${validationErrors.title ? "border-red-300" : ""}`}
             />
+            {validationErrors.title && (
+              <p className="mt-1 text-sm text-red-600">
+                {validationErrors.title}
+              </p>
+            )}
           </div>
         </div>
 
@@ -145,8 +163,13 @@ export default function EventForm({ event, onClose }: EventFormProps) {
             value={formData.description}
             onChange={handleChange}
             placeholder="Descreva os detalhes do seu evento, o que os participantes irão aprender ou experienciar..."
-            className="mt-2 resize-none"
+            className={`mt-2 resize-none focus-visible:ring-1 focus-visible:ring-violet-500/50 ${validationErrors.description ? "border-red-300" : ""}`}
           />
+          {validationErrors.description && (
+            <p className="mt-1 text-sm text-red-600">
+              {validationErrors.description}
+            </p>
+          )}
         </div>
 
         {/* Image URL and Preview */}
@@ -163,7 +186,13 @@ export default function EventForm({ event, onClose }: EventFormProps) {
               value={formData.imageUrl}
               onChange={handleChange}
               placeholder="https://exemplo.com/imagem-do-evento.jpg"
+              className={`focus-visible:ring-1 focus-visible:ring-violet-500/50 ${validationErrors.imageUrl ? "border-red-300" : ""}`}
             />
+            {validationErrors.imageUrl && (
+              <p className="mt-1 text-sm text-red-600">
+                {validationErrors.imageUrl}
+              </p>
+            )}
 
             {/* Image Preview */}
             {formData.imageUrl && (
@@ -217,9 +246,14 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                 required
                 value={formData.date}
                 onChange={handleChange}
+                className={`focus-visible:ring-1 focus-visible:ring-violet-500/50 ${validationErrors.date ? "border-red-300" : ""}`}
               />
-              <Calendar className="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
             </div>
+            {validationErrors.date && (
+              <p className="mt-1 text-sm text-red-600">
+                {validationErrors.date}
+              </p>
+            )}
           </div>
 
           <div>
@@ -232,14 +266,21 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                 name="price"
                 type="number"
                 min="0"
+                max="10000"
                 step="0.01"
                 required
                 value={formData.price}
                 onChange={handleChange}
                 placeholder="0,00"
+                className={`focus-visible:ring-1 focus-visible:ring-violet-500/50 ${validationErrors.price ? "border-red-300" : ""}`}
               />
               <DollarSign className="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
             </div>
+            {validationErrors.price && (
+              <p className="mt-1 text-sm text-red-600">
+                {validationErrors.price}
+              </p>
+            )}
           </div>
         </div>
 

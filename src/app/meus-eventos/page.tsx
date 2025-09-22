@@ -141,7 +141,7 @@ export default function MeusEventosPage() {
     eventTitle: string;
     isPaid: boolean;
   }) => (
-    <DialogContent className="max-w-md">
+    <DialogContent className="max-w-md bg-white">
       <DialogHeader>
         <DialogTitle className="flex items-center gap-2">
           <QrCode className="w-5 h-5 text-violet-600" />
@@ -239,7 +239,7 @@ export default function MeusEventosPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-full bg-gray-50 py-8">
       <div className={classNames.container.xl}>
         {/* Header */}
         <div className="mb-8">

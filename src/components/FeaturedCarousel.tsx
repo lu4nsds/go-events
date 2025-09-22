@@ -81,9 +81,9 @@ export function FeaturedCarousel({ events }: FeaturedCarouselProps) {
       });
 
       if (response.status === 401) {
-        // User not logged in, redirect to register
+        // User not logged in, redirect to login with eventId
         toast.info("Faça login para se inscrever no evento");
-        router.push(`/register?eventId=${eventId}`);
+        router.push(`/login?eventId=${eventId}`);
         return;
       }
 
