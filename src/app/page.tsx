@@ -3,6 +3,7 @@ import { FeaturedEventsCarousel } from "@/components/FeaturedEventsCarousel";
 import { Event } from "@/types";
 import { prisma } from "@/lib/prisma";
 import { classNames } from "@/lib/design-tokens";
+import { HeroSection } from "@/components/HeroSection";
 
 async function getEvents(): Promise<Event[]> {
   try {
@@ -69,21 +70,10 @@ export default async function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section with Featured Events Carousel */}
       <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 py-4">
-        <div className="w-full">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Descubra Eventos
-              <span className="block bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                Incríveis
-              </span>
-            </h1>
-          </div>
-
+        <div className="w-full mb-10">
+          <HeroSection />
           {featuredEvents.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-                Eventos em Destaque
-              </h2>
               <FeaturedEventsCarousel events={featuredEvents} />
             </div>
           )}
