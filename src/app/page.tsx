@@ -70,7 +70,7 @@ export default async function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section with Featured Events Carousel */}
       <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 py-4">
-        <div className="w-full mb-10">
+        <div className="w-full ">
           <HeroSection />
           {featuredEvents.length > 0 && (
             <div className="mb-8">
