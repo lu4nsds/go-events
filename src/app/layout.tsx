@@ -30,9 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        <main className="bg-white" style={{ height: "calc(100vh - 70px)" }}>
-          {children}
-        </main>
+        <main className="bg-white min-h-screen">{children}</main>
         <Toaster
           position="top-right"
           expand={true}
