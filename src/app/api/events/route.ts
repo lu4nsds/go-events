@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAuthUser } from '@/lib/auth'
 import { EventSchema } from '@/lib/validations'
+import { revalidatePath } from 'next/cache'
 
 export async function GET() {
   try {
@@ -47,6 +48,10 @@ export async function POST(request: NextRequest) {
     const event = await prisma.event.create({
       data: validation.data
     })
+
+    // Revalidate pages that show events
+    revalidatePath('/')
+    revalidatePath('/admin/events')
 
     return NextResponse.json(event, { status: 201 })
   } catch (error) {

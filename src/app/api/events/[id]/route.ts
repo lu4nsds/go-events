@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthUser } from "@/lib/auth";
 import { UpdateEventSchema } from "@/lib/validations";
+import { revalidatePath } from 'next/cache';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -63,6 +64,10 @@ export async function PUT(request: NextRequest, { params }: Props) {
       data: validation.data,
     });
 
+    // Revalidate pages that show events
+    revalidatePath('/')
+    revalidatePath('/admin/events')
+
     return NextResponse.json(event);
   } catch (error) {
     console.error("Erro ao atualizar evento:", error);
@@ -106,6 +111,10 @@ export async function DELETE(request: NextRequest, { params }: Props) {
         where: { id },
       });
     });
+
+    // Revalidate pages that show events
+    revalidatePath('/')
+    revalidatePath('/admin/events')
 
     return NextResponse.json({ message: "Evento excluído com sucesso" });
   } catch (error) {

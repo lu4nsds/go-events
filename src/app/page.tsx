@@ -5,6 +5,11 @@ import { prisma } from "@/lib/prisma";
 import { classNames } from "@/lib/design-tokens";
 import { HeroSection } from "@/components/HeroSection";
 
+// Revalidate every 60 seconds
+export const revalidate = 60;
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 async function getEvents(): Promise<Event[]> {
   try {
     const events = await prisma.event.findMany({
