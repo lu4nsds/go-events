@@ -2,6 +2,8 @@
 
 Uma plataforma completa de gerenciamento de eventos construída com Next.js 14, Prisma e PostgreSQL.
 
+<!-- Fixed migration conflict in production - distance field ready -->
+
 ## 🚀 Funcionalidades
 
 - **Página inicial**: Lista de eventos disponíveis
