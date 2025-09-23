@@ -27,7 +27,6 @@ export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -55,32 +54,19 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setIsScrolled(scrollPosition > 10);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest('[data-user-menu]')) {
+      if (!target.closest("[data-user-menu]")) {
         setIsUserMenuOpen(false);
       }
     };
 
     if (isUserMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isUserMenuOpen]);
 
@@ -171,7 +157,7 @@ export default function Navbar() {
 
   if (loading) {
     return (
-      <nav className="sticky top-0 bg-white shadow-sm z-50 border-b border-gray-100">
+      <nav className="sticky top-0 bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 z-50">
         <div className={classNames.container.xl}>
           <div className="flex justify-between items-center h-[70px]">
             <div className="flex items-center">
@@ -189,13 +175,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav
-      className={`sticky top-0 z-50 transition-all duration-300 ease-in-out ${
-        isScrolled
-          ? "bg-white shadow-sm border-b border-gray-100"
-          : "bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50"
-      }`}
-    >
+    <nav className="sticky top-0 z-50 bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50">
       <div className={classNames.container.xl}>
         <div className="flex justify-between items-center h-[70px]">
           {/* Logo */}
@@ -226,13 +206,18 @@ export default function Navbar() {
                   <span className="text-gray-700 font-medium">
                     Olá, {user.name.split(" ")[0]}
                   </span>
-                  <svg 
-                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`}
-                    fill="none" 
-                    stroke="currentColor" 
+                  <svg
+                    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserMenuOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
@@ -255,9 +240,9 @@ export default function Navbar() {
                         </Link>
                       </li>
                     )}
-                    
+
                     <hr className="my-2 border-gray-200" role="menuitem" />
-                    
+
                     <li role="menuitem">
                       <button
                         onClick={() => {
@@ -267,9 +252,7 @@ export default function Navbar() {
                         className="cursor-pointer text-gray-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100"
                       >
                         <LogOut className="w-5 h-5 text-gray-400" />
-                        <p className="text-gray-800 font-medium ml-2">
-                          Sair
-                        </p>
+                        <p className="text-gray-800 font-medium ml-2">Sair</p>
                       </button>
                     </li>
                   </ul>
