@@ -5,6 +5,7 @@ export interface Event {
   imageUrl: string;
   date: string;
   price: number;
+  distance: string;
   createdAt: string;
   _count?: {
     registrations: number;

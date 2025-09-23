@@ -119,14 +119,11 @@ export default function EventCard({ event }: EventCardProps) {
           </Badge>
         </div>
 
-        {/* Date Badge */}
+        {/* Distance Badge */}
         <div className="absolute top-3 left-3">
           <div className="bg-white/95 rounded-lg p-2 text-center min-w-[3rem] shadow-sm">
-            <div className="text-xs font-medium text-gray-600 uppercase">
-              {formatDate(event.date).split(" ")[1]}
-            </div>
-            <div className="text-lg font-bold text-gray-900">
-              {formatDate(event.date).split(" ")[0]}
+            <div className="text-lg font-bold text-violet-600">
+              {event.distance || "N/A"}
             </div>
           </div>
         </div>

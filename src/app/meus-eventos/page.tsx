@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Download,
   Copy,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -326,6 +327,12 @@ export default function MeusEventosPage() {
                             </div>
 
                             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                              {registration.event?.distance && (
+                                <div className="flex items-center gap-1">
+                                  <MapPin className="w-4 h-4" />
+                                  <span>{registration.event.distance}</span>
+                                </div>
+                              )}
                               {registration.event?.date && (
                                 <>
                                   <div className="flex items-center gap-1">
@@ -457,6 +464,12 @@ export default function MeusEventosPage() {
                             </div>
 
                             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                              {registration.event?.distance && (
+                                <div className="flex items-center gap-1">
+                                  <MapPin className="w-4 h-4" />
+                                  <span>{registration.event.distance}</span>
+                                </div>
+                              )}
                               {registration.event?.date && (
                                 <>
                                   <div className="flex items-center gap-1">

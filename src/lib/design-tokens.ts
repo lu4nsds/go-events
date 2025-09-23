@@ -138,6 +138,7 @@ export const classNames = {
   grid: {
     responsive: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
     form: "grid grid-cols-1 md:grid-cols-2 gap-4",
+    form3: "grid grid-cols-1 md:grid-cols-3 gap-4",
   },
 
   // Badge patterns

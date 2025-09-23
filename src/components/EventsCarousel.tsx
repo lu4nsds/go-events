@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Calendar, Clock, DollarSign, Users } from "lucide-react";
+import { Calendar, Clock, DollarSign, Users, MapPin } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
@@ -178,6 +178,12 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
 
         {/* Event Details */}
         <div className="flex flex-wrap justify-center gap-6 mb-6 px-4">
+          {/* Distance */}
+          <div className="flex items-center text-gray-600">
+            <MapPin className="w-5 h-5 mr-2 text-violet-600" />
+            <span className="font-medium">{currentEvent.distance}</span>
+          </div>
+
           {/* Date */}
           <div className="flex items-center text-gray-600">
             <Calendar className="w-5 h-5 mr-2 text-violet-600" />
@@ -213,7 +219,7 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
         <Button
           onClick={() => handleParticipate(currentEvent.id)}
           disabled={loading === currentEvent.id}
-          className="rounded-full font-medium bg-violet-600 hover:bg-violet-700 text-white shadow-sm hover:shadow-md transition-all duration-200 px-8 py-3"
+          className="rounded-full font-medium bg-violet-600 hover:bg-violet-700 text-white shadow-sm hover:shadow-md transition-all duration-200 px-12 py-4 text-lg"
           size="lg"
         >
           {loading === currentEvent.id ? (

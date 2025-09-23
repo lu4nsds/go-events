@@ -32,6 +32,7 @@ model Event {
   imageUrl  String
   date      DateTime
   price     Float
+  distance  String   @default("5km") // ex: "5km", "10km", "21km", "42km"
   createdAt DateTime @default(now())
   registrations Registration[]
 

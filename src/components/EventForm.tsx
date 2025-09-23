@@ -25,6 +25,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
     imageUrl: "",
     date: "",
     price: 0,
+    distanceNumber: 5, // Número da distância sem "km"
   });
   const [loading, setLoading] = useState(false);
   const [imagePreviewError, setImagePreviewError] = useState(false);
@@ -34,12 +35,18 @@ export default function EventForm({ event, onClose }: EventFormProps) {
 
   useEffect(() => {
     if (event) {
+      // Extrair número da distância (remover "km")
+      const distanceNum = event.distance
+        ? parseInt(event.distance.replace(/[^\d]/g, "")) || 5
+        : 5;
+
       setFormData({
         title: event.title,
         description: event.description,
         imageUrl: event.imageUrl,
         date: new Date(event.date).toISOString().slice(0, 16), // Format for datetime-local input
         price: event.price,
+        distanceNumber: distanceNum,
       });
     }
   }, [event]);
@@ -51,9 +58,12 @@ export default function EventForm({ event, onClose }: EventFormProps) {
 
     try {
       const eventData = {
-        ...formData,
+        title: formData.title,
+        description: formData.description,
+        imageUrl: formData.imageUrl,
         date: new Date(formData.date).toISOString(),
         price: Number(formData.price),
+        distance: `${formData.distanceNumber}km`, // Adicionar "km" automaticamente
       };
 
       // Client-side validation
@@ -140,7 +150,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
               required
               value={formData.title}
               onChange={handleChange}
-              placeholder="Ex: Workshop de React para Iniciantes"
+              placeholder="Ex: Corrida de Rua 5km - Centro da Cidade"
               className={`mt-2 focus-visible:ring-1 focus-visible:ring-violet-500/50 ${validationErrors.title ? "border-red-300" : ""}`}
             />
             {validationErrors.title && (
@@ -232,8 +242,8 @@ export default function EventForm({ event, onClose }: EventFormProps) {
           </div>
         </div>
 
-        {/* Date/Time and Price */}
-        <div className={classNames.grid.form}>
+        {/* Date/Time, Distance and Price */}
+        <div className={classNames.grid.form3}>
           <div>
             <Label htmlFor="date" className="text-base font-medium">
               Data e Hora
@@ -252,6 +262,34 @@ export default function EventForm({ event, onClose }: EventFormProps) {
             {validationErrors.date && (
               <p className="mt-1 text-sm text-red-600">
                 {validationErrors.date}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="distanceNumber" className="text-base font-medium">
+              Distância (km)
+            </Label>
+            <div className="relative mt-2">
+              <Input
+                id="distanceNumber"
+                name="distanceNumber"
+                type="number"
+                min="1"
+                max="100"
+                required
+                value={formData.distanceNumber}
+                onChange={handleChange}
+                placeholder="5"
+                className={`focus-visible:ring-1 focus-visible:ring-violet-500/50 ${validationErrors.distance ? "border-red-300" : ""}`}
+              />
+              <div className="absolute right-3 top-3 text-gray-400 pointer-events-none">
+                km
+              </div>
+            </div>
+            {validationErrors.distance && (
+              <p className="mt-1 text-sm text-red-600">
+                {validationErrors.distance}
               </p>
             )}
           </div>
@@ -287,15 +325,6 @@ export default function EventForm({ event, onClose }: EventFormProps) {
         {/* Form Actions */}
         <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
           <Button
-            type="button"
-            onClick={onClose}
-            variant="outline"
-            className="sm:order-1"
-          >
-            Cancelar
-          </Button>
-
-          <Button
             type="submit"
             disabled={loading}
             className="sm:order-2 sm:ml-auto"
@@ -320,6 +349,15 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                 )}
               </div>
             )}
+          </Button>
+
+          <Button
+            type="button"
+            onClick={onClose}
+            variant="outline"
+            className="sm:order-1"
+          >
+            Cancelar
           </Button>
         </div>
       </form>

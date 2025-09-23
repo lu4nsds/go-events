@@ -50,6 +50,14 @@ export const EventSchema = z.object({
     .number()
     .min(0, "Preço deve ser maior ou igual a 0")
     .max(10000, "Preço deve ser menor que R$ 10.000"),
+  distance: z
+    .string()
+    .min(1, "Distância é obrigatória")
+    .max(10, "Distância deve ter no máximo 10 caracteres")
+    .regex(
+      /^\d+(\.\d+)?(km|K|k)$/,
+      "Formato inválido. Use: 5km, 10km, 21km, etc."
+    ),
 });
 
 export const UpdateEventSchema = EventSchema.partial();
