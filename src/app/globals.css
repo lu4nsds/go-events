@@ -81,6 +81,14 @@
   border-color: rgb(var(--border));
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));

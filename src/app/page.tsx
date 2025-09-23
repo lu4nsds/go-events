@@ -67,7 +67,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="min-h-screen">
+    <div>
       {/* Hero Section with Featured Events Carousel */}
       <section className="bg-gradient-to-br from-violet-50 via-indigo-50 to-blue-50 py-4">
         <div className="w-full ">

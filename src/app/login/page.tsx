@@ -104,7 +104,10 @@ function LoginForm() {
   };
 
   return (
-    <div className="h-full flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <div
+      className="flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8"
+      style={{ height: "calc(100vh - 70px)" }}
+    >
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg border border-gray-200 p-8">
         <div className="space-y-8">
           <div>
@@ -210,7 +213,10 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="h-full flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+        <div
+          className="flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8"
+          style={{ height: "calc(100vh - 70px)" }}
+        >
           <div className="max-w-md w-full bg-white rounded-lg shadow-lg border border-gray-200 p-8 flex items-center justify-center">
             <p className="text-gray-600">Carregando...</p>
           </div>
