@@ -27,7 +27,7 @@ export function AnimatedHeroTitle() {
   }, [runningWords.length]);
 
   return (
-    <div className="text-center mb-10">
+    <div className="text-center mb-5">
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
         Descubra Eventos
         <div className="relative h-20 md:h-24 lg:h-28 overflow-hidden">

@@ -89,8 +89,9 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
   // Calculate slides per view based on number of events
   const getSlidesPerView = () => {
     if (events.length === 1) return 1;
-    if (events.length === 2) return 2;
-    return 3; // For 3 or more events, show 3 at a time
+    if (events.length === 2) return 1;
+    if (events.length === 3) return 2; // Show 2 events at a time, allowing navigation to the 3rd
+    return 3; // For 4+ events, show 3 at a time
   };
 
   // Get current event for displaying info below
@@ -100,20 +101,32 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
 
   const currentEvent = getCurrentEvent();
 
+  // Calculate max width based on number of events
+  const getMaxWidth = () => {
+    if (events.length === 1) return "max-w-lg"; // Smaller for 1 event
+    if (events.length === 2) return "max-w-2xl"; // Larger for 2 events
+    if (events.length === 3) return "max-w-5xl"; // Larger for 3 events
+    return "max-w-full"; // Full width for 4+ events
+  };
+
   return (
-    <div className="w-full px-10 mx-auto">
+    <div className={`w-full px-10 mx-auto ${getMaxWidth()}`}>
       {/* Image Carousel */}
       <div className="relative">
         <Swiper
           onSlideChange={(swiper) => setCurrentSlide(swiper.realIndex)}
           spaceBetween={30}
           slidesPerView={getSlidesPerView()}
-          centeredSlides={events.length === 1}
-          loop={events.length > 3}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
+          centeredSlides={events.length <= 2}
+          loop={events.length > 1}
+          autoplay={
+            events.length > 1
+              ? {
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }
+              : false
+          }
           pagination={{
             clickable: true,
           }}
@@ -122,16 +135,15 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
           className="events-carousel"
           breakpoints={{
             320: {
-              slidesPerView: 1,
+              slidesPerView: 1, // Mobile always 1
               spaceBetween: 20,
             },
             768: {
-              slidesPerView:
-                events.length === 1 ? 1 : events.length === 2 ? 2 : 2,
+              slidesPerView: events.length === 3 ? 2 : 1, // Tablet shows 2 for 3 events, 1 for others
               spaceBetween: 30,
             },
             1024: {
-              slidesPerView: getSlidesPerView(),
+              slidesPerView: getSlidesPerView(), // Desktop shows according to logic
               spaceBetween: 30,
             },
           }}
@@ -158,7 +170,7 @@ export function EventsCarousel({ events }: EventsCarouselProps) {
       </div>
 
       {/* Event Information Below Carousel */}
-      <div className="mt-8 text-center">
+      <div className="text-center">
         {/* Event Title */}
         <h3 className="text-2xl font-bold text-gray-900 mb-6 px-4">
           {currentEvent.title}
