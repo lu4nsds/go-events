@@ -16,7 +16,7 @@ out/
 .env.production.local
 
 # Database
-prisma/migrations/
+# Migrations são necessárias na Vercel para deploy
 !prisma/migrations/migration_lock.toml
 
 # IDEs
