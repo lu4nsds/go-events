@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Event } from "@/types";
 import EventForm from "@/components/EventForm";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import {
   Plus,
   Edit,
@@ -33,6 +34,8 @@ export default function AdminEventsPage() {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [error, setError] = useState("");
   const [deletingEvent, setDeletingEvent] = useState<string | null>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -68,21 +71,38 @@ export default function AdminEventsPage() {
       if (response.ok) {
         setEvents(events.filter((event) => event.id !== eventId));
         toast.success("Evento excluído com sucesso!");
+        // Atualiza a lista após excluir
+        fetchEvents();
       } else {
-        const error = await response.json();
-        toast.error(error.error || "Erro ao excluir evento");
+        const errorData = await response.json();
+        console.error("Erro na resposta:", errorData);
+        toast.error(
+          errorData.error ||
+            "Erro ao excluir evento. Verifique se não há inscrições associadas."
+        );
       }
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Erro ao excluir evento");
+      console.error("Erro na requisição:", error);
+      toast.error(
+        "Erro ao excluir evento. Verifique sua conexão com a internet."
+      );
     } finally {
       setDeletingEvent(null);
     }
   };
 
   const confirmDelete = (event: Event) => {
-    if (confirm(`Tem certeza que deseja excluir o evento "${event.title}"?`)) {
-      handleDelete(event.id);
+    // Armazenar o evento para exclusão e abrir o modal de confirmação
+    setEventToDelete(event);
+    setConfirmDialogOpen(true);
+  };
+
+  // Função que será chamada quando o usuário confirmar a exclusão no modal
+  const handleConfirmDelete = () => {
+    if (eventToDelete) {
+      handleDelete(eventToDelete.id);
+      setConfirmDialogOpen(false);
+      setEventToDelete(null);
     }
   };
 
@@ -337,6 +357,27 @@ export default function AdminEventsPage() {
             ))}
           </div>
         )}
+        
+        {/* Modal de confirmação de exclusão */}
+        <ConfirmDialog
+          open={confirmDialogOpen}
+          onOpenChange={setConfirmDialogOpen}
+          title="Confirmação de exclusão"
+          description={`Tem certeza que deseja excluir o evento "${eventToDelete?.title}"?`}
+          onConfirm={handleConfirmDelete}
+          confirmText="Excluir evento"
+          cancelText="Cancelar"
+          variant="destructive"
+          loading={deletingEvent === eventToDelete?.id}
+          alertMessage={
+            eventToDelete && 
+            eventToDelete._count && 
+            eventToDelete._count.registrations > 0 
+              ? `Este evento possui ${eventToDelete._count.registrations} inscrição(ões).\nTodas as inscrições serão permanentemente excluídas junto com o evento.` 
+              : undefined
+          }
+          alertType="warning"
+        />
       </div>
     </div>
   );
