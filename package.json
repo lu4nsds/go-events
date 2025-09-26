@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate && prisma migrate deploy && next build --turbopack --no-cache",
+    "build": "prisma generate && prisma migrate deploy && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "create-admin": "node scripts/create-admin.mjs",
-    "clear-cache": "rm -rf .next && npm run build"
+    "create-admin": "node scripts/create-admin.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",

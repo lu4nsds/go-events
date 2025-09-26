@@ -10,8 +10,6 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const token = request.cookies.get("auth-token")?.value;
 
-  console.log(`[MIDDLEWARE] Request: ${pathname}, Token: ${token ? "present" : "missing"}`);
-
   // Skip middleware for static files and Next.js internals
   if (
     pathname.startsWith("/_next/") ||
@@ -56,15 +54,12 @@ export async function middleware(request: NextRequest) {
 
     // Check permissions for the route
     if (!canAccessRoute(userRole as UserRole, pathname)) {
-      console.log(`[MIDDLEWARE] Access denied for ${userRole} to ${pathname}`);
-      
       if (pathname.startsWith("/api/")) {
         return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
       }
 
       // Redirect to appropriate route based on user role
       const redirectPath = getRedirectRoute(userRole as UserRole, pathname);
-      console.log(`[MIDDLEWARE] Redirecting ${userRole} from ${pathname} to ${redirectPath}`);
       return NextResponse.redirect(new URL(redirectPath, request.url));
     }
 
@@ -77,8 +72,8 @@ export async function middleware(request: NextRequest) {
     response.headers.set("x-user-email", payload.email as string);
 
     return response;
-  } catch (error) {
-    console.error("Erro ao verificar token:", error);
+  } catch (_error) {
+    // Não podemos usar console.error no Edge Runtime
 
     // Clear invalid token
     const response = pathname.startsWith("/api/")
