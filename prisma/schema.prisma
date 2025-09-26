@@ -13,12 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
   password  String
-  isAdmin   Boolean  @default(false)
+  role      UserRole @default(USER)
+  isAdmin   Boolean  @default(false) // Manter para compatibilidade
   createdAt DateTime @default(now())
   registrations Registration[]
 

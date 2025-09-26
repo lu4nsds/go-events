@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthUser } from "@/lib/auth";
 import { UpdateEventSchema } from "@/lib/validations";
-import { revalidatePath } from 'next/cache';
+import { hasPermission, Permission, UserRole } from "@/lib/permissions";
+import { revalidatePath } from "next/cache";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -44,7 +45,10 @@ export async function GET(request: NextRequest, { params }: Props) {
 export async function PUT(request: NextRequest, { params }: Props) {
   try {
     const user = await getAuthUser();
-    if (!user || !user.isAdmin) {
+    if (
+      !user ||
+      !hasPermission(user.role as UserRole, Permission.EDIT_EVENTS)
+    ) {
       return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
     }
 
@@ -65,8 +69,8 @@ export async function PUT(request: NextRequest, { params }: Props) {
     });
 
     // Revalidate pages that show events
-    revalidatePath('/')
-    revalidatePath('/admin/events')
+    revalidatePath("/");
+    revalidatePath("/admin/events");
 
     return NextResponse.json(event);
   } catch (error) {
@@ -81,7 +85,10 @@ export async function PUT(request: NextRequest, { params }: Props) {
 export async function DELETE(request: NextRequest, { params }: Props) {
   try {
     const user = await getAuthUser();
-    if (!user || !user.isAdmin) {
+    if (
+      !user ||
+      !hasPermission(user.role as UserRole, Permission.DELETE_EVENTS)
+    ) {
       return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
     }
 
@@ -113,8 +120,8 @@ export async function DELETE(request: NextRequest, { params }: Props) {
     });
 
     // Revalidate pages that show events
-    revalidatePath('/')
-    revalidatePath('/admin/events')
+    revalidatePath("/");
+    revalidatePath("/admin/events");
 
     return NextResponse.json({ message: "Evento excluído com sucesso" });
   } catch (error) {

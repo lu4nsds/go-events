@@ -1,66 +1,69 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { hashPassword, setAuthCookie } from '@/lib/auth'
-import { RegisterSchema } from '@/lib/validations'
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { hashPassword, setAuthCookie } from "@/lib/auth";
+import { RegisterSchema } from "@/lib/validations";
+import { UserRole } from "@/lib/permissions";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const validation = RegisterSchema.safeParse(body)
+    const body = await request.json();
+    const validation = RegisterSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Dados inválidos', details: validation.error.issues },
+        { error: "Dados inválidos", details: validation.error.issues },
         { status: 400 }
-      )
+      );
     }
 
-    const { name, email, password } = validation.data
+    const { name, email, password } = validation.data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: { email }
-    })
+      where: { email },
+    });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'Usuário já existe com este email' },
+        { error: "Usuário já existe com este email" },
         { status: 409 }
-      )
+      );
     }
 
     // Hash password and create user
-    const hashedPassword = await hashPassword(password)
+    const hashedPassword = await hashPassword(password);
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-      }
-    })
+        role: UserRole.USER, // Default role for new users
+      },
+    });
 
     // Set authentication cookie
     await setAuthCookie({
       userId: user.id,
       email: user.email,
+      role: user.role as UserRole,
       isAdmin: user.isAdmin,
-    })
+    });
 
     return NextResponse.json({
-      message: 'Usuário criado com sucesso',
+      message: "Usuário criado com sucesso",
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
         isAdmin: user.isAdmin,
-      }
-    })
-
+      },
+    });
   } catch (error) {
-    console.error('Erro no registro:', error)
+    console.error("Erro no registro:", error);
     return NextResponse.json(
-      { error: 'Erro interno do servidor' },
+      { error: "Erro interno do servidor" },
       { status: 500 }
-    )
+    );
   }
 }

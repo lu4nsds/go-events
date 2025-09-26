@@ -10,6 +10,7 @@ async function createAdmin() {
       name: "Administrador",
       email: "admin@go-events.com", // ← ALTERE PARA SEU EMAIL
       password: "admin123", // ← ALTERE PARA SUA SENHA
+      role: "ADMIN",
       isAdmin: true,
     };
 
@@ -30,7 +31,10 @@ async function createAdmin() {
         // Se existe mas não é admin, atualizar para admin
         await prisma.user.update({
           where: { email: adminData.email },
-          data: { isAdmin: true },
+          data: {
+            isAdmin: true,
+            role: "ADMIN",
+          },
         });
         console.log("✅ Usuário existente atualizado para admin!");
         console.log("🔑 Use a senha cadastrada anteriormente");
@@ -47,6 +51,7 @@ async function createAdmin() {
         name: adminData.name,
         email: adminData.email,
         password: hashedPassword,
+        role: adminData.role,
         isAdmin: true,
       },
     });

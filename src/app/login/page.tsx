@@ -70,6 +70,8 @@ function LoginForm() {
               toast.success(
                 "Login realizado e inscrição no evento confirmada!"
               );
+              // Trigger auth state change event
+              window.dispatchEvent(new Event("authChange"));
               router.push("/meus-eventos");
               return;
             } else {
@@ -82,6 +84,8 @@ function LoginForm() {
           }
         }
 
+        // Trigger auth state change event
+        window.dispatchEvent(new Event("authChange"));
         router.push(redirectTo);
         router.refresh();
       } else {
