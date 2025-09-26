@@ -8,8 +8,8 @@ import { Home, ArrowLeft, Search } from "lucide-react";
 export default function NotFoundPage() {
   return (
     <div
-      className="bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4"
-      style={{ height: "calc(100vh - 70px)" }}
+      className="min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4"
+      data-not-found="true"
     >
       <Card className="w-full max-w-md">
         <CardContent className="p-8 text-center">

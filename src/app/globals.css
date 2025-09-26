@@ -89,6 +89,13 @@ body {
   overflow-x: hidden;
 }
 
+/* Specific styles for not-found pages */
+html:has([data-not-found="true"]),
+body:has([data-not-found="true"]) {
+  overflow: hidden;
+  max-height: 100vh;
+}
+
 body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
